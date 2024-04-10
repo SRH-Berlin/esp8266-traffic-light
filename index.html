@@ -11,25 +11,26 @@
             var yellow = false; 
             var green = false;
             let flashingEvent;
+            let ip_addr = "<IP_ADDRESS>"
         </script>
         <script defer>
             async function SetRed(bool){
-                await fetch(`http://192.168.8.166/?color=red&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                await fetch(`http://${ip_addr}/?color=red&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
                 document.getElementById("red").style.backgroundColor = bool ? "rgb(220 38 38)" : "rgba(23, 23, 23, 0.9)"
                 red = bool;
             }
             async function SetYellow(bool){
-                await fetch(`http://192.168.8.166/?color=yellow&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                await fetch(`http://${ip_addr}/?color=yellow&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
                 document.getElementById("yellow").style.backgroundColor = bool ? "rgb(250 204 21)" : "rgba(23, 23, 23, 0.9)"
                 yellow = bool;
             }
             async function SetGreen(bool){
-                await fetch(`http://192.168.8.166/?color=green&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                await fetch(`http://${ip_addr}/?color=green&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
                 document.getElementById("green").style.backgroundColor = bool ? "rgb(22 163 74)" : "rgba(23, 23, 23, 0.9)"
                 green = bool;
             }
             async function setLight(str, bool){
-                await fetch(`http://192.168.8.166/?color=${str}&state=${String(bool)}`, {method : "GET"})
+                await fetch(`http://${ip_addr}/?color=${str}&state=${String(bool)}`, {method : "GET"})
             }
             // document.addEventListener("click", async(e)=>{
             //     color = e.target.id
