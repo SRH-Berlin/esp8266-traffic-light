@@ -1,0 +1,129 @@
+<html>
+    <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .on{
+                opacity: 100%;
+            }
+        </style>
+        <script>
+            var red = true;
+            var yellow = false; 
+            var green = false;
+            let flashingEvent;
+        </script>
+        <script defer>
+            async function SetRed(bool){
+                await fetch(`http://192.168.8.166/?color=red&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                document.getElementById("red").style.backgroundColor = bool ? "rgb(220 38 38)" : "rgba(23, 23, 23, 0.9)"
+                red = bool;
+            }
+            async function SetYellow(bool){
+                await fetch(`http://192.168.8.166/?color=yellow&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                document.getElementById("yellow").style.backgroundColor = bool ? "rgb(250 204 21)" : "rgba(23, 23, 23, 0.9)"
+                yellow = bool;
+            }
+            async function SetGreen(bool){
+                await fetch(`http://192.168.8.166/?color=green&state=${String(bool).toLowerCase()}`, {mode : "no-cors"})
+                document.getElementById("green").style.backgroundColor = bool ? "rgb(22 163 74)" : "rgba(23, 23, 23, 0.9)"
+                green = bool;
+            }
+            async function setLight(str, bool){
+                await fetch(`http://192.168.8.166/?color=${str}&state=${String(bool)}`, {method : "GET"})
+            }
+            // document.addEventListener("click", async(e)=>{
+            //     color = e.target.id
+            //     if (["red", "green"].indexOf(e.target.id) != -1){
+            //         if (green){}
+            //     }
+            //     if (e.target.id == "yellow"){
+            //         return
+            //         await SetRed(false)
+            //         await SetYellow(false)
+            //         await SetGreen(false)
+            //         if (!flashingEvent){
+            //             flashingEvent = setInterval(async()=>{
+            //                 await SetYellow(yellow)
+            //             }, 500)
+            //         }
+            //         else {
+            //             clearInterval(flashingEvent)
+            //             flashingEvent = null;
+            //         }
+            //     }
+            // })
+        </script>
+    </head>
+    <body class="min-h-screen">
+            <div id="traffic_light" class="h-[500px] w-[12rem] absolute left-0 right-0 top-0 bottom-0 mx-auto my-auto grid grid-cols-1 rounded-[10rem] bg-gray-600/80 grid-rows-3 border border-black py-4" style="row-gap: 10px;">
+                <div class="row-span-1 hover:cursor-pointer">
+                    <div id="red" class="mx-auto rounded-full border-4  border-black h-full aspect-square" style="background-color: rgb(220 38 38);"></div>
+                </div>
+                <div class="row-span-1 hover:cursor-pointer">
+                    <div id="yellow" class="mx-auto rounded-full border-4  border-black bg-yellow-400 h-full aspect-square" style="background-color: rgb(250 204 21);"></div>
+                </div>
+                <div class="row-span-1 hover:cursor-pointer">
+                    <div id="green" class="mx-auto rounded-full border-4  border-black bg-green-600 h-full aspect-square" style="background-color: rgb(22 163 74);"></div>
+                </div>
+            </div>
+    </body>
+    <footer>
+        <script>
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            document.addEventListener("DOMContentLoaded", ()=>{
+                SetRed(false)
+                SetYellow(false)
+                SetGreen(false)
+            })
+            function disableInput(boolean){
+                document.getElementById("red").style.cursor = boolean ? "not-allowed" : "pointer"
+                document.getElementById("yellow").style.cursor = boolean ? "not-allowed" : "pointer"
+                document.getElementById("green").style.cursor = boolean ? "not-allowed" : "pointer"
+                document.body.style.cursor = boolean ? "progress" : "default"
+            }
+            async function toggleLights() {
+                disableInput(true)
+                if (!red && !yellow && !green){
+                    await SetRed(true);
+                }
+                else if (red && !yellow && !green) {
+                    await SetGreen(true);
+                    await SetRed(false);
+                    await SetYellow(false);
+                } 
+                // Green to Red transition
+                else if (!red && !yellow && green) {
+                    await SetYellow(true);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    await SetGreen(false);
+                    await SetYellow(false);
+                    await SetRed(true);
+                }
+                disableInput(false)
+        }
+            document.getElementById("traffic_light").addEventListener(("click"), async(e)=>{
+                await toggleLights();
+            });
+            document.getElementById("yellow").addEventListener(("click"), async(e)=>{
+                e.stopPropagation()
+                if (flashingEvent){
+                    clearInterval(flashingEvent)
+                    flashingEvent = null;
+                    await SetGreen(false);
+                    await SetYellow(false);
+                    await SetRed(true);
+                }
+                else {
+                    await SetGreen(false);
+                    await SetYellow(false);
+                    await SetRed(false);
+                    flashingEvent = setInterval(async()=>{
+                        SetYellow(!yellow)
+                    }, 500)
+                }
+            });
+        </script>
+    </footer>
+</html>
