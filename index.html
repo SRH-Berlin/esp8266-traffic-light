@@ -1,3 +1,4 @@
+<DOCTYPE html>
 <html>
     <head>
         <script src="https://cdn.tailwindcss.com"></script>
@@ -7,11 +8,11 @@
             }
         </style>
         <script>
-            var red = true;
-            var yellow = false; 
-            var green = false;
+            let red = true;
+            let yellow = false; 
+            let green = false;
             let flashingEvent;
-            let ip_addr = "<IP_ADDRESS>"
+            let ip_addr = `${window.location.host}:${window.location.port}`
         </script>
         <script defer>
             async function SetRed(bool){
