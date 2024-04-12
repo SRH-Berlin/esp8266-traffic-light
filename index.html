@@ -121,7 +121,7 @@
                     await SetYellow(false);
                     await SetRed(false);
                     flashingEvent = setInterval(async()=>{
-                        SetYellow(!yellow)
+                        await SetYellow(!yellow)
                     }, 500)
                 }
             });
