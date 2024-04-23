@@ -8,6 +8,7 @@
             }
         </style>
         <script>
+            
             let red = true;
             let yellow = false; 
             let green = false;
@@ -74,6 +75,7 @@
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
+            //when page loads turns everything off
             document.addEventListener("DOMContentLoaded", ()=>{
                 SetRed(false)
                 SetYellow(false)
